@@ -19,3 +19,9 @@ class Tile:
         self.rank=rank
         
         # random test change
+
+class Player:
+    def __init__(self, playername):
+        self.name=playername
+        self.playerhand=[]
+        self.chow=None
