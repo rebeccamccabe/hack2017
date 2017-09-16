@@ -37,3 +37,4 @@ class Player:
         self.playerhand=[]
         self.chow=None
         self.is_cpu = is_cpu     # bool
+        self.revealed=[]        #list of tiles revealed through pung and chow moves
