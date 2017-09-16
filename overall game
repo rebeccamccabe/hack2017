@@ -72,7 +72,19 @@ cpu_player_2= Player("player2", True)
 cpu_player_3= Player("player3", True)
 cpu_player_4= Player("player4", True)
 
-next_player=turn(user_player_1)
+players= [user_player_1, cpu_player_2, cpu_player_3, cpu_player_4]
+
+for player in players:
+  for i in range(13):
+    player.playerhand.append(walls[0])
+    del walls[0]
+
+for player in players:
+ # print(player.name+": "+str(player.playerhand))
+  flower_check(player)
+#  print(player.name+": "+str(player.playerhand))
+
+next_player=user_player_1
 
 while no_win:
-  next_player=turn(next_player) #i have no idea if this loop will work
+  turn(next_player) #i have no idea if this loop will work
