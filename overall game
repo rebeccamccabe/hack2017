@@ -5,5 +5,14 @@
 # keep going with turns until a win state is achieved
 #maybe account for skipped turns in here? by going off of "next player"?
 
+no_win=False
 
-user_player=
+user_player_1= Player("player1user", False)
+cpu_player_2= Player("player2", True)
+cpu_player_3= Player("player3", True)
+cpu_player_4= Player("player4", True)
+
+next_player=turn(user_player_1)
+
+while no_win:
+  next_player=turn(next_player) #i have no idea if this loop will work
