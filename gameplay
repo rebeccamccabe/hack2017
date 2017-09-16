@@ -6,14 +6,14 @@ def draw(player):
     print("Drew: "+walls[0].name)
     del walls[0]
 
-def turn(player, tiles, discards):
+def turn(player, discards):
     """"takes in name of current player, player's hand as a list, and tiles as a list"""
 
     if player.is_cpu:
         pass
     #do other things if this is a CPU!
 
-    #print current hand probably
+    print(player.playerhand)
 
     move=input("please type draw or pung or chow to choose a move") #user input
 
