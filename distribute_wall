@@ -7,8 +7,8 @@ def whose_wall_to_break_first():
     roll2=random.randrange(1,7)
     roll3=random.randrange(1,7)
     total=roll1+roll2+roll3
-    print('You rolled a ',roll1,', ', roll2, ', and a ', roll3, '.')
-    print('Your total is ', total, '.')
+    print('You rolled a '+str(roll1)+', a '+str(roll2)+', and a '+str(roll3)+'.')
+    print('Your total is', str(total)+'.')
     remainder=total%4 #because you count around the table total times
     break_first=directions[remainder]
     print ('The first player whose wall will be broken is', break_first)
