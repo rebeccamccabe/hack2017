@@ -1,3 +1,10 @@
+def flower_check(player):
+  for tile in player.playerhand:
+    if tile.suit == "flowers":
+      player.revealed.append(tile)
+      player.playerhand.remove(tile)
+      draw(player) #should technically draw from the back but fine for now #also if flower_check is in Player draw should be as well
+      has_cash_money = True
 
 #will need players_list global variable, walls as a global variable, and user_player as the name of one of the players
 #start game play
@@ -48,43 +55,44 @@ class Tile:
 
 suits = ["bamboo", "dots", "characters", "specials", "flowers"]
 
-tileset = []
-for i in range(4): # 4 instances of each 
-	for j in range(len(suits) - 2): # each of the first three suits
-		for k in range(9):
-			t = Tile(suits[j], k)
+if __name__ == "__main__":
+	tileset = []
+	for i in range(4): # 4 instances of each 
+		for j in range(len(suits) - 2): # each of the first three suits
+			for k in range(9):
+				t = Tile(suits[j], k)
+				tileset.append(t)
+		for k in range(7):
+			t = Tile(suits[3], k)
 			tileset.append(t)
-	for k in range(7):
-		t = Tile(suits[3], k)
-		tileset.append(t)
-for i in range(8):
-	tileset.append(Tile(suits[4], 0)) # adding 8 flower tiles
-print(tileset)
+	for i in range(8):
+		tileset.append(Tile(suits[4], 0)) # adding 8 flower tiles
+	print(tileset)
 
-walls = copy.deepcopy(tileset)
-shuffle(walls)
+	walls = copy.deepcopy(tileset)
+	shuffle(walls)
 
-#set no win to false
-no_win=False
-#create players
-user_player_1= Player("player1user", False)
-cpu_player_2= Player("player2", True)
-cpu_player_3= Player("player3", True)
-cpu_player_4= Player("player4", True)
+	#set no win to false
+	no_win=False
+	#create players
+	user_player_1= Player("player1user", False)
+	cpu_player_2= Player("player2", True)
+	cpu_player_3= Player("player3", True)
+	cpu_player_4= Player("player4", True)
 
-players= [user_player_1, cpu_player_2, cpu_player_3, cpu_player_4]
+	players= [user_player_1, cpu_player_2, cpu_player_3, cpu_player_4]
 
-for player in players:
-  for i in range(13):
-    player.playerhand.append(walls[0])
-    del walls[0]
+	for player in players:
+	  for i in range(13):
+	    player.playerhand.append(walls[0])
+	    del walls[0]
 
-for player in players:
- # print(player.name+": "+str(player.playerhand))
-  flower_check(player)
-#  print(player.name+": "+str(player.playerhand))
+	for player in players:
+	  print(player.name+": "+str(player.playerhand))
+	  flower_check(player)
+	  print(player.name+": "+str(player.playerhand))
 
-next_player=user_player_1
+	next_player=user_player_1
 
-while no_win:
-  turn(next_player) #i have no idea if this loop will work
+	while no_win:
+	  turn(next_player) #i have no idea if this loop will work
