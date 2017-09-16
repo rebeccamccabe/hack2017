@@ -1,0 +1,15 @@
+
+dict_name_to_tile={"B1":["bamboo", 1], "B2":["bamboo", 2], "B3":["bamboo", 3], "B4":["bamboo", 4], "B5":["bamboo", 5],"B6":["bamboo", 6],
+                   "B7": ["bamboo", 7], "B8":["bamboo", 8], "B9":["bamboo", 9],
+                   "D1":["dots", 1], "D2":["dots", 2], "D3":["dots", 3], "D4":["dots", 4], "D5":["dots", 5],"D6":["dots", 6],
+                   "D7": ["dots", 7], "D8":["dots", 8], "D9":["dots", 9], 
+                   "C1":["characters", 1], "C2":["characters", 2], "C3":["characters", 3], "C4":["characters", 4], "C5":["characters", 5],"C6":["characters", 6],
+                   "C7": ["characters", 7], "C8":["characters", 8], "C9":["characters", 9], 
+                   "SN":["specials", 1], "SE":["specials", 2], "SS":["specials", 3], "SW":["specials", 4], "SM":["specials", 5],"SG":["specials", 6], "SB":["specials", 6],
+                   "F":["flowers", 0]}
+
+class Tile:
+    def __init__(self, name):
+        self.name=name
+        self.suit=dict_name_to_tile[name][0]
+        self.rank=dict_name_to_tile[name][1]
