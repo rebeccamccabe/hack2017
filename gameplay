@@ -1,0 +1,104 @@
+#player should save if they had a chow and need to use the same suit
+# deal with flowers
+#also if player has a chow thing that should be factored in
+def turn(player, tiles, discards):
+    """"takes in name of current player, player's hand as a list, and tiles as a list"""
+
+    if player.is_cpu:
+        pass
+    #do other things if this is a CPU!
+    move=input("please type draw or pung to choose a move") #user input
+
+    #can claim most recent discard tile and pung
+    if move == "pung":
+        pung(player, discards)
+
+    elif move == "draw":
+        #draw a tile
+        player.playerhand.append(tiles[0])
+        del tiles[0]
+
+    mahjong=bool(input("Can you declare mahjong? type in True or False"))
+    if mahjong:
+        check_mahjong(player.playerhand)
+        win(player)
+        pass
+
+    discard_tile_name=input("please choose a tile to discard")
+    #user input
+    #possibly could print the different tiles the player has and have them input 1 to whatever to select
+
+    discard_tile=None
+    for tile in player.playerhand:
+        if tile.name==discard_tile_name:
+            discard_tile=tile
+    #discard a tile
+    player.playerhand.remove(discard_tile)
+
+def pung(player,discards):
+    """uses current player and discards, where the last element in discards is the tile discarded by the last player"""
+    last_tile=discards[-1]
+    pung_tiles = [last_tile]
+
+    #goes through and finds matches for last_tile in the player's hand, compared using the name
+    for tile in player.playerhand:
+        if last_tile.name == tile.name:
+            pung_tiles.append(tile)
+
+    #checks to make sure pung is a legal move in this case
+    if len(pung_tiles) != 3:
+        print("Sorry, you do not have the correct tiles for pung")
+    else:
+        #take out the 2 tiles from playerhand
+        player.playerhand.remove(pung_tiles[1])
+        player.playerhand.remove(pung_tiles[2])
+
+        #add list of pung tiles to revealed tiles
+        player.revealed.append(pung_tiles)
+        #remove tile used from discards
+        discards.remove(last_tile)
+
+def chow(player, discards):
+    last_tile=discards[-1]
+    suit=last_tile.suit
+    chow_tiles=[last_tile]
+
+    #using input because there could be mult possibilities for the chow, want to use the one the player intended
+    chow_tile_1_name=input("please input the name of the first tile for chow")
+    chow_tile_2_name=input("please input the name of the second tile for chow")
+
+    #goes through and finds the tiles specified
+    for tile in player.playerhand:
+        if chow_tile_1_name == tile.name or chow_tile_2_name == tile.name:
+            chow_tiles.append(tile)
+
+    #check if tiles work (correct suit, in consecutive rank order)
+    illegal=False
+    tile_ranks=[]
+    for tile in chow_tiles:
+        tile_ranks.append(tile.rank)
+        if tile.suit != suit:
+            illegal=True
+    
+    if illegal:
+        print("Sorry, you do not have the correct tiles for chow")
+    elif len(chow_tiles) != 3:
+         print("Sorry, you do not have the tiles you named")
+    else:
+        # take out the 2 tiles from playerhand
+        player.playerhand.remove(chow_tiles[1])
+        player.playerhand.remove(chow_tiles[2])
+
+        # add list of pung tiles to revealed tiles
+        player.revealed.append(chow_tiles)
+        #set the player's chow variable to the suit used
+        player.chow=suit
+        # remove tile used from discards
+        discards.remove(last_tile)
+
+
+def check_mahjong(hand):
+    raise NotImplementedError
+
+def win(player):
+    raise NotImplementedError
