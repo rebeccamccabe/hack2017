@@ -43,9 +43,8 @@ def turn(player, discards):
 
         mahjong=bool(input("Can you declare mahjong? type in True or False"))
         if mahjong:
-            check_mahjong(player.playerhand)
-            win(player)
-            pass
+            if check_mahjong(player):
+                win(player)
 
         discard_tile_name=input("please choose a tile to discard")
         #user input
