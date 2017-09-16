@@ -7,6 +7,14 @@ dict_name_to_tile={"B1":["bamboo", 1], "B2":["bamboo", 2], "B3":["bamboo", 3], "
                    "C7": ["characters", 7], "C8":["characters", 8], "C9":["characters", 9], 
                    "SN":["specials", 1], "SE":["specials", 2], "SS":["specials", 3], "SW":["specials", 4], "SM":["specials", 5],"SG":["specials", 6], "SB":["specials", 7],
                    "F":["flowers", 0]}
+dict_tile_to_name = {["bamboo", 1]:"B1", ["bamboo", 2]:"B2", ["bamboo", 3]:"B3", ["bamboo", 4]:"B4", ["bamboo", 5]:"B5",["bamboo", 6]:"B6",
+                   ["bamboo", 7]:"B7" , ["bamboo", 8]:"B8", ["bamboo", 9]:"B9",
+                   ["dots", 1]:"D1", ["dots", 2]:"D2", ["dots", 3]:"D3", ["dots", 4]:"D4", ["dots", 5]:"D5", ["dots", 6]:"D6",
+                   ["dots", 7]:"D7" , ["dots", 8]:"D8", ["dots", 9]:"D9", 
+                   ["characters", 1]:"C1", ["characters", 2]:"C2", ["characters", 3]:"C3":, ["characters", 4]:"C4", ["characters", 5]:"C5",["characters", 6]:"C6",
+                   ["characters", 7]:"C7" , ["characters", 8]:"C8", ["characters", 9]:"C9", 
+                   ["specials", 1]:"SN", ["specials", 2]:"SE", ["specials", 3]:"SS", ["specials", 4]:"SW", ["specials", 5]:"SM",["specials", 6]:"SG", ["specials", 7]:"SB",
+                   ["flowers", 0]:"F"}
 
 class Tile:
     def __init__(self, name):
@@ -17,11 +25,15 @@ class Tile:
         self.name=tile_to_name(suit, rank)
         self.suit=suit
         self.rank=rank
+    def __repr__(self):
+        return "Tile()"
+    def __str__(self):
+        return self.name
         
-        # random test change
 
 class Player:
-    def __init__(self, playername):
+    def __init__(self, playername, is_cpu):
         self.name=playername
         self.playerhand=[]
         self.chow=None
+        self.is_cpu = is_cpu     # bool
