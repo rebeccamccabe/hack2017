@@ -23,15 +23,19 @@ def turn(player, discards):
     """"takes in name of current player, player's hand as a list, and tiles as a list"""
 
     # set next player
-    nextplayer = players_list[(players_list.index(player) + 1) % 4]
+    # nextplayer = players_list[(players_list.index(player) + 1) % 4]
+    # print(str(players_list.index(player) + 1))
+    # print(str((players_list.index(player) + 1) % 4))
+    # print("right after assignment")
+    # print(nextplayer.name)
     if player.is_cpu:
-        cpu_turn(player)
+        cpu_turn(player, discards)
         user_pung = input("do you wish to pung this tile? True or False")
         if user_pung:
             punged = check_pung(user_player_1)
             pung(user_player_1)
             if punged:
-                next_player = players_list[(players_list.index(user_player) + 1) % 4]
+                next_player = players_list[(players_list.index(user_player_1) + 1) % 4]
     else:
         # print current hand
         print("your current hand is:")
@@ -266,7 +270,8 @@ if __name__ == "__main__":
 
     next_player=user_player_1
 
+
     while no_win:
-        print("next player is")
-        print(next_player.name)
         turn(next_player, discards) #i have no idea if this loop will work
+        # set next player
+        next_player = players_list[(players_list.index(player) + 1) % 3]
