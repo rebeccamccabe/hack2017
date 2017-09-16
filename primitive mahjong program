@@ -68,8 +68,6 @@ def turn(player, discards):
         player.playerhand.remove(discard_tile)
         print("tile discarded by " + player.name + " is " + discard_tile_name)
 
-    return nextplayer
-
 
 def cpu_turn(player, discards):
     """cpus draw and random discard"""
