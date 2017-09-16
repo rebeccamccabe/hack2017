@@ -1,6 +1,6 @@
-# deal with flowers
-# add in a way for them to pung on other people's turns and change the next player's turn i guess
-#also if player has a chow thing that should be factored in
+#will need players_list global variable, walls as a global variable, and user_player as the name of one of the players
+import random
+
 def draw(player):
     player.playerhand.append(walls[0])
     print("Drew: "+walls[0].name)
@@ -9,41 +9,81 @@ def draw(player):
 def turn(player, discards):
     """"takes in name of current player, player's hand as a list, and tiles as a list"""
 
+    #set next player
+    nextplayer=players_list[(players_list.index(player)+1)%4]
     if player.is_cpu:
-        pass
-    #do other things if this is a CPU!
+        cpu_turn(player)
+        user_pung = input("do you wish to pung this tile? True or False")
+        if user_pung:
+            punged=check_pung(user_player)
+            pung(user_player)
+            if punged:
+                next_player=players_list[(players_list.index(user_player)+1)%4]
+    else:
+        #print current hand
+        print("your current hand is:")
+        playerhand_names=[]
+        for tile in player.playerhand:
+            playerhand_names.append(tile.name)
+        print(playerhand_names)
 
-    print(player.playerhand)
+        move=input("please type draw or pung or chow to choose a move") #user input
 
-    move=input("please type draw or pung or chow to choose a move") #user input
-
-    #can claim most recent discard tile and pung
-    if move == "pung":
-        pung(player, discards)
-    elif move == "chow":
-        chow(player, discards)
-    elif move == "draw":
-        #draw a tile
-        draw(player)
+        #can claim most recent discard tile and pung
+        if move == "pung":
+            pung(player, discards)
+        elif move == "chow":
+            chow(player, discards)
+        elif move == "draw":
+            #draw a tile
+            draw(player)
 
 
-    mahjong=bool(input("Can you declare mahjong? type in True or False"))
-    if mahjong:
-        check_mahjong(player.playerhand)
-        win(player)
-        pass
+        mahjong=bool(input("Can you declare mahjong? type in True or False"))
+        if mahjong:
+            check_mahjong(player.playerhand)
+            win(player)
+            pass
 
-    discard_tile_name=input("please choose a tile to discard")
-    #user input
-    #possibly could print the different tiles the player has and have them input 1 to whatever to select
+        discard_tile_name=input("please choose a tile to discard")
+        #user input
+        #possibly could print the different tiles the player has and have them input 1 to whatever to select
 
-    discard_tile=None
-    for tile in player.playerhand:
-        if tile.name==discard_tile_name:
-            discard_tile=tile
-    #discard a tile
+        discard_tile=None
+        for tile in player.playerhand:
+            if tile.name==discard_tile_name:
+                discard_tile=tile
+        #discard a tile
+        player.playerhand.remove(discard_tile)
+        print("tile discarded by "+ player.name + " is "+ discard_tile_name)
+
+    return nextplayer
+
+def cpu_turn(player, discards):
+    """cpus draw and random discard"""
+    draw(player)
+    discard_tile=random.choice(player.playerhand)
+    print("tile discarded by " + player.name + " is " + discard_tile.name)
     player.playerhand.remove(discard_tile)
-    print("tile discarded by "+ player.name + " is "+ discard_tile_name)
+    discards.append(discard_tile)
+
+
+#i could probably put this into pung but i won't for now
+def check_pung(player,discards):
+    """uses current player and discards, where the last element in discards is the tile discarded by the last player"""
+    last_tile=discards[-1]
+    pung_tiles = [last_tile]
+
+    #goes through and finds matches for last_tile in the player's hand, compared using the name
+    for tile in player.playerhand:
+        if last_tile.name == tile.name:
+            pung_tiles.append(tile)
+
+    #checks to make sure pung is a legal move in this case
+    if len(pung_tiles) != 3:
+        return False
+    else:
+        return True
 
 def pung(player,discards):
     """uses current player and discards, where the last element in discards is the tile discarded by the last player"""
@@ -67,7 +107,7 @@ def pung(player,discards):
         player.revealed.append(pung_tiles)
         #remove tile used from discards
         discards.remove(last_tile)
-
+    
 def chow(player, discards):
     last_tile=discards[-1]
     suit=last_tile.suit
@@ -95,6 +135,7 @@ def chow(player, discards):
         illegal=True
     if illegal:
         print("Sorry, you do not have the correct tiles for chow")
+
     elif len(chow_tiles) != 3:
          print("Sorry, you do not have the tiles you named")
     else:
@@ -108,7 +149,6 @@ def chow(player, discards):
         player.chow=suit
         # remove tile used from discards
         discards.remove(last_tile)
-
 
 def check_mahjong(hand):
     raise NotImplementedError
