@@ -1,6 +1,11 @@
 # deal with flowers
 # add in a way for them to pung on other people's turns and change the next player's turn i guess
 #also if player has a chow thing that should be factored in
+def draw(player):
+    player.playerhand.append(walls[0])
+    print("Drew: "+walls[0].name)
+    del walls[0]
+
 def turn(player, tiles, discards):
     """"takes in name of current player, player's hand as a list, and tiles as a list"""
 
@@ -19,9 +24,7 @@ def turn(player, tiles, discards):
         chow(player, discards)
     elif move == "draw":
         #draw a tile
-        player.playerhand.append(tiles[0])
-        print("the tile you drew is " + tiles[0].name)
-        del tiles[0]
+        draw(player)
 
 
     mahjong=bool(input("Can you declare mahjong? type in True or False"))
