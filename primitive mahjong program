@@ -32,7 +32,7 @@ def turn(player, discards):
     if player.is_cpu:
         cpu_turn(player, discards)
         user_pung = input("do you wish to pung this tile? True or False: ")
-        if user_pung:
+        if user_pung == "True":
             punged = check_pung(user_player_1, discards)
             pung(user_player_1, discards)
             if punged:
