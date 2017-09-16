@@ -15,9 +15,9 @@ class Player:
 
 def draw(player):
     player.playerhand.append(walls[0])
-    print("Drew: " + walls[0].name)
-    flower_check(player)
+    print("Drew: " + walls[0].name)    
     del walls[0]
+    flower_check(player)
 
 
 def turn(player, discards):
