@@ -71,6 +71,7 @@ def turn(player, discards):
                 discard_tile = tile
         # discard a tile
         player.playerhand.remove(discard_tile)
+        discards.append(discard_tile)
         print("tile discarded by " + player.name + " is " + discard_tile_name)
 
 
