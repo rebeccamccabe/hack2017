@@ -16,6 +16,7 @@ class Player:
 def draw(player):
     player.playerhand.append(walls[0])
     print("Drew: " + walls[0].name)
+    flower_check(player)
     del walls[0]
 
 
@@ -23,19 +24,15 @@ def turn(player, discards):
     """"takes in name of current player, player's hand as a list, and tiles as a list"""
 
     # set next player
-    # nextplayer = players_list[(players_list.index(player) + 1) % 4]
-    # print(str(players_list.index(player) + 1))
-    # print(str((players_list.index(player) + 1) % 4))
-    # print("right after assignment")
-    # print(nextplayer.name)
+    next_player = players_list[(players_list.index(player) + 1) % 4]
     if player.is_cpu:
-        cpu_turn(player, discards)
-        user_pung = input("do you wish to pung this tile? True or False")
+        cpu_turn(player)
+        user_pung = input("do you wish to pung this tile? True or False: ")
         if user_pung:
             punged = check_pung(user_player_1)
             pung(user_player_1)
             if punged:
-                next_player = players_list[(players_list.index(user_player_1) + 1) % 4]
+                next_player = players_list[(players_list.index(user_player) + 1) % 4]
     else:
         # print current hand
         print("your current hand is:")
@@ -44,7 +41,7 @@ def turn(player, discards):
             playerhand_names.append(tile.name)
         print(playerhand_names)
 
-        move = input("please type draw or pung or chow to choose a move")  # user input
+        move = input("please type draw or pung or chow to choose a move: ")  # user input
 
         # can claim most recent discard tile and pung
         if move == "pung":
@@ -56,11 +53,11 @@ def turn(player, discards):
             draw(player)
 
         #checks it whether you type in true or false :(
-        mahjong = bool(input("Can you declare mahjong? type in True or False"))
+        mahjong = bool(input("Can you declare mahjong? type in True or False: "))
         if mahjong:
             check_mahjong(player.playerhand)
 
-        discard_tile_name = input("please choose a tile to discard")
+        discard_tile_name = input("please choose a tile to discard: ")
         # user input
         # possibly could print the different tiles the player has and have them input 1 to whatever to select
 
@@ -71,6 +68,8 @@ def turn(player, discards):
         # discard a tile
         player.playerhand.remove(discard_tile)
         print("tile discarded by " + player.name + " is " + discard_tile_name)
+
+    return next_player
 
 
 def cpu_turn(player, discards):
@@ -112,7 +111,7 @@ def pung(player, discards):
 
     # checks to make sure pung is a legal move in this case
     if len(pung_tiles) != 3:
-        print("Sorry, you do not have the correct tiles for pung")
+        print("Sorry, you do not have the correct tiles for pung ")
     else:
         # take out the 2 tiles from playerhand
         player.playerhand.remove(pung_tiles[1])
@@ -130,8 +129,8 @@ def chow(player, discards):
     chow_tiles = [last_tile]
 
     # using input because there could be mult possibilities for the chow, want to use the one the player intended
-    chow_tile_1_name = input("please input the name of the first tile for chow")
-    chow_tile_2_name = input("please input the name of the second tile for chow")
+    chow_tile_1_name = input("please input the name of the first tile for chow ")
+    chow_tile_2_name = input("please input the name of the second tile for chow ")
 
     # goes through and finds the tiles specified
     for tile in player.playerhand:
@@ -150,10 +149,10 @@ def chow(player, discards):
     if tile_ranks[1] - tile_ranks[0] != 1 or tile_ranks[2] - tile_ranks[0] != 2:
         illegal = True
     if illegal:
-        print("Sorry, you do not have the correct tiles for chow")
+        print("Sorry, you do not have the correct tiles for chow ")
 
     elif len(chow_tiles) != 3:
-        print("Sorry, you do not have the tiles you named")
+        print("Sorry, you do not have the tiles you named ")
     else:
         # take out the 2 tiles from playerhand
         player.playerhand.remove(chow_tiles[1])
@@ -270,8 +269,7 @@ if __name__ == "__main__":
 
     next_player=user_player_1
 
-
     while no_win:
+        print("next player is")
+        print(next_player.name)
         turn(next_player, discards) #i have no idea if this loop will work
-        # set next player
-        next_player = players_list[(players_list.index(player) + 1) % 3]
