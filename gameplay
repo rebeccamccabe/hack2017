@@ -1,5 +1,5 @@
-#player should save if they had a chow and need to use the same suit
 # deal with flowers
+# add in a way for them to pung on other people's turns and change the next player's turn i guess
 #also if player has a chow thing that should be factored in
 def turn(player, tiles, discards):
     """"takes in name of current player, player's hand as a list, and tiles as a list"""
@@ -7,16 +7,22 @@ def turn(player, tiles, discards):
     if player.is_cpu:
         pass
     #do other things if this is a CPU!
-    move=input("please type draw or pung to choose a move") #user input
+
+    #print current hand probably
+
+    move=input("please type draw or pung or chow to choose a move") #user input
 
     #can claim most recent discard tile and pung
     if move == "pung":
         pung(player, discards)
-
+    elif move == "chow":
+        chow(player, discards)
     elif move == "draw":
         #draw a tile
         player.playerhand.append(tiles[0])
+        print("the tile you drew is " + tiles[0].name)
         del tiles[0]
+
 
     mahjong=bool(input("Can you declare mahjong? type in True or False"))
     if mahjong:
@@ -34,6 +40,7 @@ def turn(player, tiles, discards):
             discard_tile=tile
     #discard a tile
     player.playerhand.remove(discard_tile)
+    print("tile discarded by "+ player.name + " is "+ discard_tile_name)
 
 def pung(player,discards):
     """uses current player and discards, where the last element in discards is the tile discarded by the last player"""
@@ -79,7 +86,10 @@ def chow(player, discards):
         tile_ranks.append(tile.rank)
         if tile.suit != suit:
             illegal=True
-    
+        if tile.suit == "specials" or tile.suit == "flowers":
+            illegal=True
+    if tile_ranks[1]-tile_ranks[0] != 1 or tile_ranks[2]-tile_ranks[0] != 2:
+        illegal=True
     if illegal:
         print("Sorry, you do not have the correct tiles for chow")
     elif len(chow_tiles) != 3:
