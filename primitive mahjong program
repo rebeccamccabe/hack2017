@@ -32,8 +32,8 @@ def turn(player, discards):
         cpu_turn(player, discards)
         user_pung = input("do you wish to pung this tile? True or False")
         if user_pung:
-            punged = check_pung(user_player_1)
-            pung(user_player_1)
+            punged = check_pung(user_player_1, discards)
+            pung(user_player_1, discards)
             if punged:
                 next_player = players_list[(players_list.index(user_player_1) + 1) % 4]
     else:
