@@ -1,54 +1,184 @@
 
-def check_win():
-    numberPungsConcealed = findPungsInHand()
-    numberChowsConcealed = findChowsInHand()
-    numberKongsConcealed = findKongsInHand()
 
-    exposed_counts_list = analyze_revealed()
+
+class Tile:
+    def __init__(self, suit, rank):
+        self.name=tile_to_name(suit, rank)
+        self.suit=suit
+        self.rank=rank
+    def __repr__(self):
+        return self.name
+
+def tile_to_name(suit, rank):
+  name = ""
+  if suit == "bamboo":
+    name += "B"
+    name += str(rank+1)
+  elif suit == "dots":
+    name += "D"
+    name += str(rank+1)
+  elif suit == "characters":
+    name += "C"
+    name += str(rank+1)
+  elif suit == "flowers":
+    name = "F"
+  elif suit == "specials":
+    name += "S"
+    specialtiles = ["N", "E", "S", "W", "M", "G", "B"]
+    name += specialtiles[rank]
+  return name
+
+hand=[]
+
+hand.append(Tile("bamboo", 3))
+hand.append(Tile("bamboo", 3))
+hand.append(Tile("bamboo", 3))
+#one pung
+
+hand.append(Tile("dots", 1))
+hand.append(Tile("dots", 2))
+hand.append(Tile("dots", 3))
+hand.append(Tile("dots", 4))
+#one chow
+
+hand.append(Tile("specials", 6))
+hand.append(Tile("specials", 6))
+hand.append(Tile("specials", 6))
+hand.append(Tile("specials", 6))
+#one pung
+
+hand.append(Tile("bamboo", 7))
+hand.append(Tile("bamboo", 1))
+hand.append(Tile("bamboo", 8))
+hand.append(Tile("bamboo", 5))
+#nothing
+
+hand.append(Tile("dots", 7))
+hand.append(Tile("dots", 7))
+#one pair
+#expected count: 1 pair, 1 chow, 2 pungs
+print(hand)
+
+
+#for testing:
+revealed=[['B1','B2','B3'],['D2','D2','D2'],['C4','C5','C6'],['B4','B4','B4','B4'],['D8','D8','D8','D8']]
+#expected count: 3 pung, 2 chows
+
+#expected total count: 1 pair, 3 chows, 5 pungs
+has_cashed_money=True
+
+##############################################################################
+import copy
+
+def check_mahjong():
+    #hand=player.hand
+    #revealed=player.revealed
+    
+    numberPungsConcealed = countDupTiles('pung', hand)
+    numberChowsConcealed = findChowsInHand(hand)
+
+    exposed_counts_list = analyze_revealed(revealed)
     numberPungsExposed = exposed_counts_list[0]
     numberChowsExposed = exposed_counts_list[1]
-    numberKongsExposed = exposed_counts_list[2]
     
     numberPungsTotal = numberPungsConcealed + numberPungsExposed
     numberChowsTotal = numberChowsConcealed + numberChowsExposed
-    numberKongsTotal = numberKongsConcealed + numberKongsExposed
-    numberSets=numberPungsTotal + numnerChowsTotal + numberKongsTotal;
+    numberSets=numberPungsTotal + numberChowsTotal
 
-    numberPairs = findPairsInHand()
+    numberPairs = countDupTiles('pair', hand)
     
+    print('Number Pungs:',numberPungsTotal,'('+ str(numberPungsConcealed) + ' in hand and',numberPungsExposed,'revealed).')
+    print('Number Chows:',numberChowsTotal,'('+ str(numberChowsConcealed) + ' in hand and',numberChowsExposed,'revealed).')
     print('Number sets:',numberSets)
     print('Number pairs:',numberPairs)
     print('Flowers:', has_cashed_money)
-    if(numberSets >= 4 & numberPairs >= 1 & has_cashed_money==true):
-        return true
-    else: return false
+    if((numberSets >= 4) & (numberPairs >= 1) & has_cashed_money==True):
+        print('Yes, you have mahjong!')
+        return True
+    else:
+        print('Sorry, that is not mahjong.')
+        return False
 
-def analyze_revealed():
-    revealed=self.revealed
-    #for testing: revealed=[['B1','B2','B3'],['D2','D2','D2'],['C4','C5','C6'],['B4','B4','B4','B4'],['D8','D8','D8','D8']]
-    #expected count: 1 pung, 2 chows, 2 kongs
-
+def analyze_revealed(revealed):
     numberPungsExposed=0
     numberChowsExposed=0
-    numberKongsExposed=0
     
     for set in revealed:
         if set[0]!=set[1]:
             numberChowsExposed+=1
-        elif len(set)== 4:
-            numberKongsExposed+=1
         else: numberPungsExposed+=1
-    numRevealed = [numberPungsExposed, numberChowsExposed, numberKongsExposed]
-    print (numRevealed)
+    numRevealed = [numberPungsExposed, numberChowsExposed]
     return numRevealed
-'''
-def findPungsInHand():
-    #still need to write
-    #choose a tile and see if both one below and one above exist
 
-def findChowsInHand():
-    #still need to write
 
-def findKongsInHand():
-    #still need to write
-'''
+def findChowsInHand(hand):
+    numChows=0
+    workingHand = copy.deepcopy(hand)
+    #working hand will have all chows removed that were already identified, so that (1,2,3,4) is not counted as two chows
+    '''
+    for tile in workingHand:    
+        if ((tile.rank>0) & (tile.rank<9)  & (tile.suit!='specials') & (tile.suit!='flowers')):
+        #the rank requirement is to avoid index out of bounds error
+        #and the suit requirement is because chows can only include characters, dots, and bamboo
+
+            desiredTile = tile_to_name(tile.suit, (tile.rank)+1)
+            desiredTile2 = tile_to_name(tile.suit, (tile.rank)-1)
+            #look for a tile that's one below and one above
+            print('I have',tile,'so I am looking for',desiredTile,'and',desiredTile2)
+            if ((workingHand.count(desiredTile) >= 1) & (workingHand.count(desiredTile2))) >= 1:
+                print('desired tiles found')
+                numChows+=1
+                workingHand.remove(desiredTile)
+                workingHand.remove(desiredTile2)
+                #remove both tiles
+    '''
+
+    for i in range(0, len(workingHand)):
+        if i>= len(workingHand): #because the length of working hand decreases as the loop progresses
+            break
+        above=-1 #the index of the tile with 1 greater rank
+        below=-1 #the index of the tile with 1 less rank
+        for j in range(0, len(workingHand)):
+            if ((workingHand[i].suit==workingHand[j].suit) & (i!=j)):
+                if workingHand[i].rank==(workingHand[j].rank)+1:
+                    below=j
+                elif workingHand[i].rank==(workingHand[j].rank)-1:
+                    above=j
+        if ((above>=0)&(below>=0)):
+            numChows+=1
+            workingHand.remove(workingHand[i])
+            workingHand.remove(workingHand[above])    
+            workingHand.remove(workingHand[below])
+    return numChows      
+
+    
+def countDupTiles(pungOrPair, hand):
+    if pungOrPair == 'pung': #for pung, you must have at least 3 tiles
+        lower=3
+        upper=10
+    else: #for pair, you must have exactly 2 tiles
+        lower=2
+        upper=2
+        
+    numSets=0
+    
+    indicesWithDups=[]
+    #the indices of hand which contain duplicate numbers, so the dups aren't counted twice
+    
+    for i in range(0, len(hand)-1):       
+        indicesWithThisNumber=[] #the indices of hand which contain duplicates of the particular tile at i
+        if indicesWithDups.count(i)==0:
+            for j in range(i+1, len(hand)): #check each tile with other tiles ahead of it           
+                if (indicesWithThisNumber.count(j)==0):
+                    if ((hand[i].rank == hand[j].rank) & (hand[i].suit == hand[j].suit)): #if the tiles are equal
+                        if len(indicesWithThisNumber)==0: #only add i to the list on the first time around 
+                            indicesWithThisNumber.append(i)
+                            indicesWithDups.append(i)
+                        indicesWithThisNumber.append(j)
+                        indicesWithDups.append(j)
+        numOccurrences=len(indicesWithThisNumber)
+        if((numOccurrences>=lower) & (numOccurrences<=upper)):
+            numSets+=1
+    return numSets
+        
+check_mahjong()
